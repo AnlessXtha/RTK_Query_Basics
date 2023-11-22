@@ -41,6 +41,44 @@
 
     - The generated API service provides a hook for each defined endpoint.
 
+## **Code**
+
+### src/store.tsx
+
+        import { configureStore } from "@reduxjs/toolkit";
+        import { setupListeners } from "@reduxjs/toolkit/query";
+        import { pokemonApi } from "./services/pokemon";
+
+        export const store = configureStore({
+        reducer: {
+            [pokemonApi.reducerPath]: pokemonApi.reducer,
+        },
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(pokemonApi.middleware),
+        });
+
+        setupListeners(store.dispatch);
+
+## **Explained**
+
+1. Import Dependencies:
+
+   - Imports necessary functions from Redux Toolkit for configuring the store (`configureStore`) and setting up listeners for background refetching (`setupListeners`).
+   - Imports the `pokemonApi` from a specified path (`"./services/pokemon"`), which contains the configuration for a Redux Toolkit Query API service.
+
+2. Configure Redux Store:
+
+   - Uses `configureStore` to create a Redux store.
+   - Configures the store with a reducer that includes the generated reducer from the `pokemonApi` as a specific top-level slice. The reducerPath is used as the key for this slice.
+   - Adds middleware to the store. The middleware is composed of the default middleware obtained using `getDefaultMiddleware` and the middleware from the `pokemonApi`.
+
+3. Setup Listeners for Background Refetching:
+
+   - Calls `setupListeners` to set up listeners for background refetching of data. This is optional but required for certain features like `refetchOnFocus` and `refetchOnReconnect` in Redux Toolkit Query.
+   - It takes the store's `dispatch` method as an argument to attach listeners to the store.
+
+In summary, this code configures a Redux store for a React application using Redux Toolkit. It includes a specific top-level slice for the pokemonApi using a generated reducer. Middleware is added to enable features of Redux Toolkit Query. Additionally, listeners are set up to handle background refetching of data. The overall setup enhances the store's capabilities for managing API requests and ensures optimal performance in a Redux-powered React application.
+
 # New Concepts
 
 ## createApi function
@@ -74,11 +112,11 @@
 
             - The `builder` object passed to the `endpoints` function provides methods for defining different types of endpoints (queries, mutations, or subscriptions).
 
-          - `getPokemonByName`(object):
+            - `getPokemonByName`(object):
 
-            - An example endpoint defined as a query using builder.query.
-            - It takes an object with a query property, where the query function is specified.
-            - The query function takes parameters related to the specific API endpoint, such as name for the Pokemon name.
+              - An example endpoint defined as a query using builder.query.
+              - It takes an object with a query property, where the query function is specified.
+              - The query function takes parameters related to the specific API endpoint, such as name for the Pokemon name.
 
         - In the example, there's one endpoint called `getPokemonByName` defined as a query using `builder.query`.
 

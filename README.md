@@ -61,21 +61,43 @@
 
 ## **Explained**
 
-1. Import Dependencies:
+1.  Import Dependencies:
 
-   - Imports necessary functions from Redux Toolkit for configuring the store (`configureStore`) and setting up listeners for background refetching (`setupListeners`).
-   - Imports the `pokemonApi` from a specified path (`"./services/pokemon"`), which contains the configuration for a Redux Toolkit Query API service.
+    - Imports necessary functions from Redux Toolkit for configuring the store (`configureStore`) and setting up listeners for background refetching (`setupListeners`).
+    - Imports the `pokemonApi` from a specified path (`"./services/pokemon"`), which contains the configuration for a Redux Toolkit Query API service.
 
-2. Configure Redux Store:
+2.  Configure Redux Store:
 
-   - Uses `configureStore` to create a Redux store.
-   - Configures the store with a reducer that includes the generated reducer from the `pokemonApi` as a specific top-level slice. The reducerPath is used as the key for this slice.
-   - Adds middleware to the store. The middleware is composed of the default middleware obtained using `getDefaultMiddleware` and the middleware from the `pokemonApi`.
+    - Uses `configureStore` to create a Redux store.
+    - Configures the store with a reducer that includes the generated reducer from the `pokemonApi` as a specific top-level slice. The reducerPath is used as the key for this slice.
+    - Adds middleware to the store. The middleware is composed of the default middleware obtained using `getDefaultMiddleware` and the middleware from the `pokemonApi`.
 
-3. Setup Listeners for Background Refetching:
+      .concat function
+      The `concat` function is used in the provided code to concatenate the default middleware obtained from `getDefaultMiddleware` with the middleware from the `pokemonApi`.
 
-   - Calls `setupListeners` to set up listeners for background refetching of data. This is optional but required for certain features like `refetchOnFocus` and `refetchOnReconnect` in Redux Toolkit Query.
-   - It takes the store's `dispatch` method as an argument to attach listeners to the store.
+             Usecase
+                     middleware: (getDefaultMiddleware) =>
+                         getDefaultMiddleware().concat(pokemonApi.middleware),
+
+      1. `getDefaultMiddleware`:
+
+         - This function is provided by `@reduxjs/toolkit` and returns an array of default middleware that Redux Toolkit sets up automatically. This middleware includes common functionalities such as thunk middleware for handling asynchronous actions.
+
+      2. `.concat(pokemonApi.middleware)`:
+
+         The `concat` method is used to concatenate arrays. In this case, it's used to combine the default middleware array with the middleware array from the `pokemonApi`.
+
+      3. Result:
+
+         - The combined array of middleware is then passed to the `configureStore` function.
+         - This ensures that both the default middleware and the middleware from the `pokemonApi` are applied to the Redux store.
+
+    In summary, **`concat` is used to merge two arrays of middleware.** In this context, it's combining the default middleware with the middleware specific to the `pokemonApi`, allowing both sets of middleware to be applied to the Redux store. This is a common pattern when configuring middleware for a Redux store using Redux Toolkit.
+
+3.  Setup Listeners for Background Refetching:
+
+    - Calls `setupListeners` to set up listeners for background refetching of data. This is optional but required for certain features like `refetchOnFocus` and `refetchOnReconnect` in Redux Toolkit Query.
+    - It takes the store's `dispatch` method as an argument to attach listeners to the store.
 
 In summary, this code configures a Redux store for a React application using Redux Toolkit. It includes a specific top-level slice for the pokemonApi using a generated reducer. Middleware is added to enable features of Redux Toolkit Query. Additionally, listeners are set up to handle background refetching of data. The overall setup enhances the store's capabilities for managing API requests and ensures optimal performance in a Redux-powered React application.
 

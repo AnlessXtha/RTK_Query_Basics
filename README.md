@@ -101,6 +101,73 @@
 
 In summary, this code configures a Redux store for a React application using Redux Toolkit. It includes a specific top-level slice for the pokemonApi using a generated reducer. Middleware is added to enable features of Redux Toolkit Query. Additionally, listeners are set up to handle background refetching of data. The overall setup enhances the store's capabilities for managing API requests and ensures optimal performance in a Redux-powered React application.
 
+## **Code**
+
+        import React from "react";
+        import "./App.css";
+        import { useGetPokemonByNameQuery } from "./services/pokemon";
+
+        function App() {
+        // Using a query hook automatically fetches data and returns query value
+        const { data, error, isLoading } = useGetPokemonByNameQuery("mew");
+        // Indvidual hooks are also accessible under the generate endpoints:
+        // const { data, error, isLoading} = pokemonApi.endpoints.getPokemonByName.useQuery('bulbasaur')
+
+        return (
+            <div className="App">
+            {error ? (
+                <>Oh no, there was an error</>
+            ) : isLoading ? (
+                <>Loading...</>
+            ) : data ? (
+                <>
+                <h3>{data.species.name}</h3>
+                <img src={data.sprites.front_shiny} alt={data.species.name} />
+                </>
+            ) : null}
+            </div>
+        );
+        }
+
+        export default App;
+
+## **Explained**
+
+1.  Import Statements:
+
+    - Imports necessary modules, including React, the component's styling (`"./App.css"`), and the `useGetPokemonByNameQuery` hook from the Pokemon API service.
+
+2.  Component Function:
+
+    - Declares a functional React component named `App`.
+    - The component represents the main application.
+
+3.  Query Hook Usage:
+
+    - Uses the `useGetPokemonByNameQuery` hook to automatically fetch Pokemon data for the Pokemon named "mew". The hook returns an object with properties like `data`, `error`, and `isLoading`.
+
+4.  Conditional Rendering:
+
+    - Conditionally renders content based on the state of the query:
+      - If there's an `error`, it displays an error message.
+      - If it's still `isLoading`, it displays a loading message.
+      - If `data` is available, it displays the Pokemon's name (`data.species.name`) and an image (`data.sprites.front_shiny`).
+
+5.  Endpoint Variation (commented out):
+
+    - Shows an alternative way to use the individual hooks for each endpoint by directly accessing them from the generated `pokemonApi`. This is commented out in the example.
+
+6.  Return JSX:
+
+    - Returns JSX with the rendered content based on the query state.
+    - Uses conditional rendering to handle different states (loading, error, success).
+
+7.  Export Default:
+
+    - Exports the `App` component as the default export.
+
+In summary, this component demonstrates the usage of Redux Toolkit Query to fetch Pokemon data using a query hook. It handles different states (loading, error, success) and conditionally renders content based on the query result.
+
 # New Concepts
 
 ## createApi function
